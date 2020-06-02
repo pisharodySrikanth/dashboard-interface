@@ -14,10 +14,12 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         minHeight: '50px',
-        margin: '10px 0 30px'
+        margin: '10px 0 30px',
+        color: '#555'
     },
     pageTitle: {
-        // fontSize: '16px'
+        fontSize: '1.125rem',
+        fontWeight: 300
     },
     searchIcon: {
         marginRight: theme.spacing(0.5),

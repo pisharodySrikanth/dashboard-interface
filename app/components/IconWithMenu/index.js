@@ -23,7 +23,14 @@ const useStyles = makeStyles(theme => ({
 	},
 	item: {
 		margin: '0 5px',
-		width: 'calc(100% - 10px)'
+		width: 'calc(100% - 10px)',
+		transitionProperty: 'background-color,color',
+		borderRadius: '.125rem',
+		'&:hover': {
+			backgroundColor: theme.palette.primary.main,
+			color: theme.palette.primary.contrastText,
+			boxShadow: theme.boxShadow
+		}
 	},
 	divider: {
 		marginTop: 8,

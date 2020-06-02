@@ -14,35 +14,34 @@ import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from './Header';
 import SideBar from './SideBar';
-
-import GlobalStyle from '../../global-styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex'
-  },
-  leftSection: {
-    flexGrow: 1,
-    padding: `0 ${theme.spacing(3)}px`
-  }
+	root: {
+		display: 'flex'
+	},
+	leftSection: {
+		flexGrow: 1,
+		padding: `0 ${theme.spacing(3)}px`
+	}
 }));
 
 export default function App() {
-  const classes = useStyles();
+	const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
-      <SideBar />
-      <div className={classes.leftSection}>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route component={NotFoundPage} />
-        </Switch>
-        <GlobalStyle />
-      </div>
-    </div>
-  );
+	return (
+		<div className={classes.root}>
+			<CssBaseline />
+			<SideBar />
+			<div className={classes.leftSection}>
+				<Header />
+				<Switch>
+					<Route exact path="/" component={HomePage} />
+					<Route component={NotFoundPage} />
+				</Switch>
+			</div>
+		</div>
+	);
 }
