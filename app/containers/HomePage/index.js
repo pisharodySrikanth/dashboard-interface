@@ -4,11 +4,12 @@
  * This is the first thing users see of our App, at the '/' route
  *
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { replace } from 'connected-react-router';
 import Dropdown from '../../components/Dropdown';
 import Grid from '@material-ui/core/Grid';
+import DataTable from './DataTable';
 import { categories, values } from './sampleData';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -45,44 +46,51 @@ function HomePage({
 	}
 
 	return (
-		<Grid container>
-			<Grid item xs={6} className={classes.dropdownWrapper}>
-				<Dropdown
-					label='Select Category'
-					value={selectedCat}
-					onChange={onCatChange}
-					className={classes.formControl}
-					id='outlined-age-native-simple'
-				>
-					{categories.map(c => (
-						<option
-							key={c}
-							value={c}
-						>
-							{c}
-						</option>
-					))}
-				</Dropdown>
+		<div>
+			<Grid container>
+				<Grid item xs={6} className={classes.dropdownWrapper}>
+					<Dropdown
+						label='Select Category'
+						value={selectedCat}
+						onChange={onCatChange}
+						className={classes.formControl}
+						id='outlined-age-native-simple'
+					>
+						{categories.map(c => (
+							<option
+								key={c}
+								value={c}
+							>
+								{c}
+							</option>
+						))}
+					</Dropdown>
+				</Grid>
+				<Grid item xs={6} className={classes.dropdownWrapper}>
+					<Dropdown
+						label={'Select Value'}
+						value={selectedVal}
+						onChange={onValChange}
+						className={classes.formControl}
+						id='outlined-age-native-simple'
+					>
+						{catValues.map((v, index) => (
+							<option
+								key={index}
+								value={index}
+							>
+								{v.name}
+							</option>
+						))}
+					</Dropdown>
+				</Grid>
 			</Grid>
-			<Grid item xs={6} className={classes.dropdownWrapper}>
-				<Dropdown
-					label={'Select Value'}
-					value={selectedVal}
-					onChange={onValChange}
-					className={classes.formControl}
-					id='outlined-age-native-simple'
-				>
-					{catValues.map((v, index) => (
-						<option
-							key={index}
-							value={index}
-						>
-							{v.name}
-						</option>
-					))}
-				</Dropdown>
-			</Grid>
-		</Grid>
+			{selectedVal && (
+				<DataTable
+					data={catValues[Number(selectedVal)]}
+				/>
+			)}
+		</div>
 	);
 }
 

@@ -10,19 +10,19 @@ export default [
         component: Report,
         exact: true,
         page: 'report'
-    }, 
+    },
     {
         path: '/chart',
         component: Chart,
         exact: true,
         page: 'chart'
-    }, 
+    },
     {
         path: `/:category(${attributes.join('|')})?/:id(\\d+)`,
         component: HomePage,
         exact: true,
         page: 'dashboard'
-    }, 
+    },
     {
         path: '/',
         component: HomePage,
