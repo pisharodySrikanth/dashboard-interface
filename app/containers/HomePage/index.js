@@ -9,11 +9,19 @@ import { connect } from 'react-redux';
 import { replace } from 'connected-react-router';
 import Dropdown from '../../components/Dropdown';
 import Grid from '@material-ui/core/Grid';
-import DataTable from './DataTable';
+import DataCard from './DataCard';
 import { categories, values } from './sampleData';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+	root: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center'
+	},
+	dropdownContainer: {
+		width: '85%'
+	},
 	dropdownWrapper: {
 		padding: theme.spacing(3)
 	},
@@ -46,8 +54,8 @@ function HomePage({
 	}
 
 	return (
-		<div>
-			<Grid container>
+		<div className={classes.root}>
+			<Grid container className={classes.dropdownContainer}>
 				<Grid item xs={6} className={classes.dropdownWrapper}>
 					<Dropdown
 						label='Select Category'
@@ -86,7 +94,7 @@ function HomePage({
 				</Grid>
 			</Grid>
 			{selectedVal && (
-				<DataTable
+				<DataCard
 					data={catValues[Number(selectedVal)]}
 				/>
 			)}
