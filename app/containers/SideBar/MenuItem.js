@@ -35,11 +35,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MenuItem({
-    id,
+    page,
     text,
     icon: Icon,
     to,
-    subMenus,
+    subMenu,
     level,
     selected,
     toggleParent
@@ -55,10 +55,10 @@ export default function MenuItem({
         setExpanded(true);
         toggleParent && toggleParent();
     }
-    const hasChildren = subMenus.length > 0;
+    const hasChildren = subMenu.length > 0;
 
     useEffect(() => {
-        if (hasChildren || id !== selected) {
+        if (hasChildren || page !== selected) {
             return;
         }
 
@@ -81,7 +81,7 @@ export default function MenuItem({
         listHtml = (
             <Collapse in={expanded} timeout="auto">
                 <MenuList
-                    list={subMenus}
+                    list={subMenu}
                     level={level + 1}
                     selected={selected}
                     toggleParent={propagateExpansion}
@@ -95,7 +95,7 @@ export default function MenuItem({
             <ListItem
                 button
                 key={text}
-                selected={id === selected}
+                selected={page === selected}
                 classes={{
                     root: classes.listItem
                 }}
@@ -118,5 +118,5 @@ export default function MenuItem({
 }
 
 MenuItem.defaultProps = {
-    subMenus: []
+    subMenu: []
 }

@@ -7,10 +7,11 @@
  *
  */
 
-import React from 'react';
+import React, {useMemo} from 'react';
 import { Switch, Route } from 'react-router-dom';
-
-import HomePage from 'containers/HomePage/Loadable';
+import { getMatchedRoute } from '../../utils/routeFunctions';
+import {connect} from 'react-redux';
+import routes from '../../routes';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from './Header';
 import SideBar from '../SideBar';
@@ -28,20 +29,34 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function App() {
+function App(props) {
 	const classes = useStyles();
+	const matchedRoute = useMemo(() => {
+		return getMatchedRoute(props.location)
+	}, [props.location.pathname]);
 
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
-			<SideBar />
+			<SideBar 
+				selected={matchedRoute ? matchedRoute.page : null}
+			/>
 			<div className={classes.leftSection}>
 				<Header />
 				<Switch>
-					<Route exact path="/" component={HomePage} />
+					{routes.map(route => (
+						<Route {...route} />
+					))}
 					<Route component={NotFoundPage} />
 				</Switch>
 			</div>
 		</div>
 	);
 }
+
+const mapStateToProps = ({router: { location }}, props) => ({
+	...props,
+	location
+});
+
+export default connect(mapStateToProps)(App);

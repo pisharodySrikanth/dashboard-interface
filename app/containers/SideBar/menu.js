@@ -6,19 +6,37 @@ export default [
     {
         text: 'Dashboard',
         icon: DashboardIcon,
-        id: 'dashboard',
-        to: '/'
+        page: 'dashboard',
+        to: '/',
+        subMenu1: [
+            {
+                text: 'Dashboard 1',
+                icon: DashboardIcon,
+                page: 'dashboard',
+                to: '/',
+            }, {
+                text: 'Dashboard 2',
+                icon: DashboardIcon,
+                page: 'dashboard2',
+                to: '/',
+            }, {
+                text: 'Dashboard',
+                icon: DashboardIcon,
+                page: 'dashboard3',
+                to: '/',
+            }
+        ]
     },
     {
         text: 'Report',
         icon: TableChartIcon,
-        id: 'report',
+        page: 'report',
         to: '/report'
     },
     {
         text: 'Visualisation',
         icon: ShowChartIcon,
-        id: 'chart',
+        page: 'chart',
         to: '/chart'
     }
 ]

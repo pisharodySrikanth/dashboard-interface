@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import {connect} from 'react-redux';
 import MenuList from './MenuList';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
@@ -34,7 +35,9 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-function SideBar() {
+function SideBar({
+	selected
+}) {
 	const classes = useStyles();
 
 	return (
@@ -54,7 +57,7 @@ function SideBar() {
 			<Divider />
 			<MenuList
 				list={menu}
-				selected={'report'}
+				selected={selected}
 			/>
 		</Drawer>
 	)
