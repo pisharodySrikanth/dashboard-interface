@@ -45,7 +45,10 @@ function App(props) {
 				<Header />
 				<Switch>
 					{routes.map(route => (
-						<Route {...route} />
+						<Route 
+							key={route.page}
+							{...route} 
+						/>
 					))}
 					<Route component={NotFoundPage} />
 				</Switch>
