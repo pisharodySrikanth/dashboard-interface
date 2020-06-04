@@ -4,14 +4,19 @@
  * This is the first thing users see of our App, at the '/' route
  *
  */
-import React, { useState } from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { replace } from 'connected-react-router';
+import { useInjectReducer } from 'utils/injectReducer';
+import { useInjectSaga } from 'utils/injectSaga';
 import Dropdown from '../../components/Dropdown';
 import Grid from '@material-ui/core/Grid';
 import DataCard from './DataCard';
-import { categories, values } from './sampleData';
 import { makeStyles } from '@material-ui/core/styles';
+import { initializeDashboard, changeCategory, changeValue } from './actions';
+import reducer, {initialState} from './reducer';
+import {selectCategoryKeys} from './selectors';
+import saga from './saga';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -32,25 +37,36 @@ const useStyles = makeStyles((theme) => ({
 
 function HomePage({
 	replace,
-	match
+	match,
+	changeCategory, 
+	changeValue,
+	initializeDashboard,
+	values,
+	categories,
+	selectedCategory,
+	selectedId,
+	selectedValue
 }) {
+	useInjectReducer({ key: 'homePage', reducer });
+	useInjectSaga({ key: 'reportPage', saga });
 	const classes = useStyles();
-	const {
-		category = '',
-		id = ''
-	} = match.params;
-	const [selectedCat, setSelectedCat] = useState(category);
-	const [selectedVal, setSelectedVal] = useState(id);
-	const catValues = values[selectedCat] || [];
+	
+	//SEE ALTERNATIVE
+	useEffect(() => {
+		const {
+			category = '',
+			id = ''
+		} = match.params;
+		initializeDashboard(category, id);
+	}, []);
 
 	const onCatChange = e => {
-		setSelectedCat(e.target.value);
-		setSelectedVal('');
+		changeCategory(e.target.value);
 	}
 
 	const onValChange = e => {
-		setSelectedVal(e.target.value);
-		replace(`/${selectedCat}/${e.target.value}`);
+		changeValue(e.target.value);
+		replace(`/${selectedCategory}/${e.target.value}`);
 	}
 
 	return (
@@ -59,7 +75,7 @@ function HomePage({
 				<Grid item xs={6} className={classes.dropdownWrapper}>
 					<Dropdown
 						label='Select Category'
-						value={selectedCat}
+						value={selectedCategory}
 						onChange={onCatChange}
 						className={classes.formControl}
 						id='outlined-age-native-simple'
@@ -77,15 +93,15 @@ function HomePage({
 				<Grid item xs={6} className={classes.dropdownWrapper}>
 					<Dropdown
 						label={'Select Value'}
-						value={selectedVal}
+						value={selectedId}
 						onChange={onValChange}
 						className={classes.formControl}
 						id='outlined-age-native-simple'
 					>
-						{catValues.map((v, index) => (
+						{values.map((v, index) => (
 							<option
 								key={index}
-								value={index}
+								value={v.id}
 							>
 								{v.name}
 							</option>
@@ -93,15 +109,38 @@ function HomePage({
 					</Dropdown>
 				</Grid>
 			</Grid>
-			{selectedVal && (
+			{selectedValue && (
 				<DataCard
-					data={catValues[Number(selectedVal)]}
+					data={selectedValue}
 				/>
 			)}
 		</div>
 	);
 }
 
-export default connect(null, {
-	replace
+const mapStateToProps = (state, props) => {
+	const homePage = state.homePage || initialState;
+	const {
+		categoryData,
+		selectedCategory,
+		selectedId
+	} = homePage;
+	const values = categoryData[selectedCategory] || [];
+	const selectedValue = values.find(v => v.id == selectedId);
+	
+	return {
+		...props,
+		categories: selectCategoryKeys(state),
+		values,
+		selectedCategory,
+		selectedId,
+		selectedValue
+	}
+};
+
+export default connect(mapStateToProps, {
+	initializeDashboard,
+	replace,
+	changeCategory,
+	changeValue
 })(HomePage);

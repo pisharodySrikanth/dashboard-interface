@@ -2,8 +2,6 @@ import HomePage from 'containers/HomePage/Loadable';
 import Report from 'containers/ReportPage/Loadable';
 import Chart from 'containers/VisualisationPage/Loadable';
 
-const attributes = ['films', 'people', 'planets', 'species', 'starships', 'vehicles'];
-
 export default [
     {
         path: '/report',
@@ -18,7 +16,7 @@ export default [
         page: 'chart'
     },
     {
-        path: `/:category(${attributes.join('|')})?/:id(\\d+)`,
+        path: `/:category?/:id(\\d+)`,
         component: HomePage,
         exact: true,
         page: 'dashboard'
