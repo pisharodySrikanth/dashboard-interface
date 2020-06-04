@@ -10,18 +10,18 @@ const fetchCategories = () => {
     return axios.get('https://swapi.dev/api/').then(r => r.data);
 }
 
-const fetchValues = categoryUrl => {
-    return fetchValueSet(categoryUrl).then(({ next, results = [] }) => {
+const fetchValues = (fetchUrl, categoryUrl) => {
+    return fetchValueSet(fetchUrl, categoryUrl).then(({ next, results = [] }) => {
         if (!next) {
             return results;
         }
-
-        return fetchValues(next).then(arr => results.concat(arr));
+        
+        return fetchValues(next, categoryUrl).then(arr => results.concat(arr));
     });
 }
 
-const fetchValueSet = categoryUrl => {
-    return axios.get(categoryUrl).then(r => {
+const fetchValueSet = (fetchUrl, categoryUrl) => {  //categoryUrl passed separately for extracting id from resource url
+    return axios.get(fetchUrl).then(r => {
         return {
             next: r.data.next,
             results: r.data.results.map(({ name, title, ...r }) => {
@@ -62,7 +62,7 @@ function* initialize(action) {
     const categoryUrl = categories[category];
 
     try {
-        const catValues = yield call(fetchValues, categoryUrl);
+        const catValues = yield call(fetchValues, categoryUrl, categoryUrl);
         yield put(setDashboardData(category, catValues, id));
     } catch (e) {
         yield put(setError(e));
@@ -78,7 +78,7 @@ function* getValues(action) {
 
     const categoryUrl = yield select(selectCategoryUrl, action.category);
     try {
-        const catValues = yield call(fetchValues, categoryUrl);
+        const catValues = yield call(fetchValues, categoryUrl, categoryUrl);
 
         yield put(setCategoryValues(catValues));
     } catch (e) {
