@@ -5,6 +5,17 @@ import { initialState } from './reducer';
  * Direct selector to the reportPage state domain
  */
 
+const selectHomePageDomain = state => state.homePage || initialState;
+const selectCategoryUrls = createSelector(
+    selectHomePageDomain,
+    homePage => homePage.categoryUrls
+);
+    
+// const selectCategoryKeys = createSelector(
+//     state => state.categoryUrls,
+//     categoryUrls => Object.keys(categoryUrls)
+// );
+
 const selectCategoryKeys = (state) => {
     const homePage = state.homePage || initialState;
 
@@ -21,6 +32,16 @@ const selectCategoryValues = (state, categoryKey) => {
     const homePage = state.homePage || initialState;
 
     return homePage.categoryData[categoryKey] || []; 
+}
+
+const selectCategory = state => state.homePage.selectedCategory;
+
+const selectResource = (state, id) => {
+    const homePage = state.homePage || initialState;
+
+    const resources = homePage.categoryData[homePage.selectedCategory] || []; 
+
+    return resources.find(r => r.id === id);
 }
 /**
  * Other specific selectors
@@ -39,5 +60,7 @@ const selectCategoryValues = (state, categoryKey) => {
 export { 
     selectCategoryKeys,
     selectCategoryUrl,
-    selectCategoryValues
+    selectCategoryValues,
+    selectResource,
+    selectCategory
 };

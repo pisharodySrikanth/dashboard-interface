@@ -2,9 +2,10 @@ import { take, call, put, select, takeEvery, takeLatest } from 'redux-saga/effec
 import { matchPath } from 'react-router-dom';
 import { setCategoryUrls, setCategoryValues, setDashboardData } from './actions';
 import { setError } from '../App/actions';
-import { CHANGE_CATEGORY, INITIALIZE_DASHBOARD } from './constants';
-import { selectCategoryUrl, selectCategoryValues } from './selectors';
+import { CHANGE_CATEGORY, INITIALIZE_DASHBOARD, CHANGE_VALUE, SET_DASHBOARD_DATA } from './constants';
+import { selectCategoryUrl, selectCategoryValues, selectCategory, selectResource } from './selectors';
 import axios from 'axios';
+import config from '../../config';
 
 const fetchCategories = () => {
     return axios.get('https://swapi.dev/api/').then(r => r.data);
@@ -47,6 +48,12 @@ const fetchValueSet = (fetchUrl, categoryUrl) => {  //categoryUrl passed separat
     });
 };
 
+function postImpression(categoryKey, resource) {
+    return axios.post(`${config.phpBase}/${categoryKey}/${resource.id}/impressions`, {
+        resourceName: resource.name
+    }).then(r => r.data);
+}
+
 function* initialize(action) {
     const categories = yield call(fetchCategories);
     yield put(setCategoryUrls(categories));
@@ -64,6 +71,9 @@ function* initialize(action) {
     try {
         const catValues = yield call(fetchValues, categoryUrl, categoryUrl);
         yield put(setDashboardData(category, catValues, id));
+        yield call(setImpression, {
+            value: id
+        });
     } catch (e) {
         yield put(setError(e));
     }
@@ -86,8 +96,19 @@ function* getValues(action) {
     }
 }
 
+function* setImpression(action) {
+    const category = yield select(selectCategory);
+    const resource = yield select(selectResource, action.value);
+    try {
+        yield call(postImpression, category, resource);
+    } catch(e) {
+        yield put(setError(e));
+    }
+}
+
 // Individual exports for testing
 export default function* homePageSaga() {
     yield takeEvery(INITIALIZE_DASHBOARD, initialize);
     yield takeLatest(CHANGE_CATEGORY, getValues);
+    yield takeEvery(CHANGE_VALUE, setImpression);
 }
