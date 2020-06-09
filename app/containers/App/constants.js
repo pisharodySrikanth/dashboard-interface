@@ -10,3 +10,7 @@
  */
 
 export const SET_ERROR = 'dashboard-interface/App/SET_ERROR';
+export const SET_CATEGORY_DATA = 'app/App/SET_CATEGORY_DATA';
+export const SET_CATEGORIES_URLS = 'app/App/SET_CATEGORIES_URLS';
+export const CHANGE_CATEGORY = 'app/App/CHANGE_CATEGORY';
+export const SET_CATEGORY_VALUES = 'app/App/SET_CATEGORY_VALUES';

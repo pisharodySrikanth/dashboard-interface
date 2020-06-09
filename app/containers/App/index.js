@@ -11,11 +11,13 @@ import React, {useMemo} from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { getMatchedRoute } from '../../utils/routeFunctions';
 import {connect} from 'react-redux';
+import { useInjectSaga } from 'utils/injectSaga';
 import routes from '../../routes';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from './Header';
 import SideBar from '../SideBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import saga from './saga';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -30,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function App(props) {
+	useInjectSaga({ key: 'global', saga });
 	const classes = useStyles();
 	const matchedRoute = useMemo(() => {
 		return getMatchedRoute(props.location)

@@ -4,12 +4,10 @@
  *
  */
 import produce from 'immer';
-import { CHANGE_CATEGORY, CHANGE_VALUE, SET_CATEGORIES_URLS, SET_CATEGORY_VALUES, SET_DASHBOARD_DATA } from './constants';
+import { CHANGE_VALUE } from './constants';
+import { CHANGE_CATEGORY, SET_CATEGORY_DATA } from '../App/constants';
 
 export const initialState = {
-	categoryUrls: {},
-	categoryData: {},
-	selectedCategory: '',
 	selectedId: ''
 };
 
@@ -17,23 +15,14 @@ export const initialState = {
 const homePageReducer = (state = initialState, action) =>
 	produce(state, draft => {
 		switch (action.type) {
-			case SET_DASHBOARD_DATA:
-				draft.selectedCategory = action.selectedCategory;
-				draft.categoryData[action.selectedCategory] = action.values;
-				draft.selectedId = action.selectedId;
-				break;
-			case CHANGE_CATEGORY:
-				draft.selectedCategory = action.category;
-				draft.selectedId = '';
-				break;
-			case SET_CATEGORY_VALUES:
-				draft.categoryData[draft.selectedCategory] = action.values;
-				break;
 			case CHANGE_VALUE:
 				draft.selectedId = action.value;
 				break;
-			case SET_CATEGORIES_URLS:
-				draft.categoryUrls = action.categoryUrls;
+			case SET_CATEGORY_DATA:
+				draft.selectedId = action.selectedId;
+				break;
+			case CHANGE_CATEGORY:
+				draft.selectedId = '';
 				break;
 		}
 	});

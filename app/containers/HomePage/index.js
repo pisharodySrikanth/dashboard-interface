@@ -4,7 +4,7 @@
  * This is the first thing users see of our App, at the '/' route
  *
  */
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { replace } from 'connected-react-router';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -13,9 +13,11 @@ import Dropdown from '../../components/Dropdown';
 import Grid from '@material-ui/core/Grid';
 import DataCard from './DataCard';
 import { makeStyles } from '@material-ui/core/styles';
-import { initializeDashboard, changeCategory, changeValue } from './actions';
-import reducer, {initialState} from './reducer';
-import {selectCategoryKeys} from './selectors';
+import { initializeDashboard, changeValue } from './actions';
+import { changeCategory } from '../App/actions';
+import { initialState } from '../App/reducer';
+import reducer, { initialState as homeInitialState } from './reducer';
+import { selectCategoryKeys } from '../App/selectors';
 import saga from './saga';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 function HomePage({
 	replace,
 	match,
-	changeCategory, 
+	changeCategory,
 	changeValue,
 	initializeDashboard,
 	values,
@@ -50,7 +52,7 @@ function HomePage({
 	useInjectReducer({ key: 'homePage', reducer });
 	useInjectSaga({ key: 'reportPage', saga });
 	const classes = useStyles();
-	
+
 	//SEE ALTERNATIVE
 	useEffect(() => {
 		const {
@@ -119,15 +121,18 @@ function HomePage({
 }
 
 const mapStateToProps = (state, props) => {
-	const homePage = state.homePage || initialState;
+	const homePage = state.homePage || homeInitialState;
+	const app = state.global || initialState;
 	const {
-		categoryData,
-		selectedCategory,
 		selectedId
 	} = homePage;
+	const {
+		categoryData,
+		selectedCategory
+	} = app;
 	const values = categoryData[selectedCategory] || [];
 	const selectedValue = values.find(v => v.id == selectedId);
-	
+
 	return {
 		...props,
 		categories: selectCategoryKeys(state),

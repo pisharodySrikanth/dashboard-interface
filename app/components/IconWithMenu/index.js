@@ -4,18 +4,13 @@
  *
  */
 
-import React, { memo, useState } from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
+import React, { memo, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
+import IconWithPopover from '../IconWithPopover';
 
 const useStyles = makeStyles(theme => ({
 	menu: {
@@ -43,76 +38,50 @@ function IconWithMenu({
 	count,
 	list,
 	onItemClick,
-	icon:Icon
+	icon
 }) {
 	const classes = useStyles();
-	const [anchorEl, setAnchorEl] = React.useState(null);
-
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
+	const popoverRef = useRef();
+	
 	const onMenuItemClick = (item) => {
-		handleClose();
+		popoverRef.current.close();
 		onItemClick(item);
 	}
 
 	return (
-		<>
-			<IconButton
-				className={iconClass}
-				onClick={handleClick}
+		<IconWithPopover
+			count={count}
+			icon={icon}
+			iconClass={iconClass}
+			ref={popoverRef}
+		>
+			<MenuList
+				classes={{
+					root: classes.menu
+				}}
 			>
-				<Badge
-					badgeContent={count}
-					color='secondary'
-				>
-					<Icon />
-				</Badge>
-			</IconButton>
-			<Popper open={Boolean(anchorEl)} anchorEl={anchorEl} role={undefined} transition disablePortal>
-				{({ TransitionProps, placement }) => (
-					<Grow
-						{...TransitionProps}
-						style={{ transformOrigin: placement === 'bottom' ? 'right top' : 'right bottom' }}
-					>
-						<Paper>
-							<ClickAwayListener onClickAway={handleClose}>
-								<MenuList
-									classes={{
-										root: classes.menu
-									}}
-								>
-									{list.map(item => item.type == 'divider' ? (
-										<Divider className={classes.divider} />
-									) : (
-										<MenuItem 
-											key={item.text || item.type}
-											onClick={() => onMenuItemClick(item)}
-											classes={{
-												root: classes.item
-											}}
-										>
-											{item.text}
-										</MenuItem>
-									))}
-								</MenuList>
-							</ClickAwayListener>
-						</Paper>
-					</Grow>
-				)}
-			</Popper>
-		</>
+				{list.map(item => item.type == 'divider' ? (
+					<Divider className={classes.divider} />
+				) : (
+						<MenuItem
+							key={item.text || item.type}
+							onClick={() => onMenuItemClick(item)}
+							classes={{
+								root: classes.item
+							}}
+						>
+							{item.text}
+						</MenuItem>
+					))}
+			</MenuList>
+		</IconWithPopover>
 	);
 }
 
 IconWithMenu.defaultProps = {
 	count: null,
-	list: []
+	list: [],
+	onItemClick: PropTypes.func.isRequired
 }
 
 IconWithMenu.propTypes = {
