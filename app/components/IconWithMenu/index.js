@@ -12,7 +12,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import IconWithPopover from '../IconWithPopover';
+import Popover from '../Popover';
 
 const useStyles = makeStyles(theme => ({
 	menu: {
@@ -71,7 +71,7 @@ function IconWithMenu({
 					<Icon />
 				</Badge>
 			</IconButton>
-			<IconWithPopover
+			<Popover
 				anchorEl={anchorEl}
 				handleClose={handleClose}
 			>
@@ -97,7 +97,7 @@ function IconWithMenu({
 							</MenuItem>
 						))}
 				</MenuList>
-			</IconWithPopover>
+			</Popover>
 		</>
 	);
 }

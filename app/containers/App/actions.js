@@ -37,9 +37,10 @@ export function setCategoryUrls(categoryUrls) {
 	}
 }
 
-export function setCategoryValues(values) {
+export function setCategoryValues(category, values) {
 	return {
 		type: SET_CATEGORY_VALUES,
+		category,
 		values
 	}
 }

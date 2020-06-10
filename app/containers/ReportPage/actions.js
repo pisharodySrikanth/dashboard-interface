@@ -4,7 +4,7 @@
  *
  */
 
-import { INITIALIZE_REPORTS, ADD_DIMENSION, REMOVE_DIMENSION, CHANGE_DATE_DIMENSION } from './constants';
+import { INITIALIZE_REPORTS, ADD_DIMENSION, REMOVE_DIMENSION, CHANGE_DATE_DIMENSION, SET_CATEGORY_FILTER, REMOVE_FILTER } from './constants';
 
 export function initializeReports() {
 	return {
@@ -30,5 +30,20 @@ export function changeDateDimension(dimension) {
 	return {
 		type: CHANGE_DATE_DIMENSION,
 		dimension
+	}
+}
+
+export function setCategoryFilter(key, value) {
+	return {
+		type: SET_CATEGORY_FILTER,
+		key,
+		value
+	}
+}
+
+export function removeFilter(key) {
+	return {
+		type: REMOVE_FILTER,
+		key
 	}
 }

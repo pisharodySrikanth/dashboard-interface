@@ -6,7 +6,7 @@ import { CHANGE_CATEGORY, INITIALIZE_CATEGORY, CHANGE_VALUE, SET_CATEGORY_DATA }
 import { selectCategoryUrl, selectCategoryValues, selectCategory, selectResource } from './selectors';
 import {fetchCategories, fetchValues} from './requests';
 
-function* getValues(action) {
+export function* getValues(action) {
     const catValues = yield select(selectCategoryValues, action.category);
 
     if (catValues.length) {
@@ -17,7 +17,7 @@ function* getValues(action) {
     try {
         const catValues = yield call(fetchValues, categoryUrl, categoryUrl);
 
-        yield put(setCategoryValues(catValues));
+        yield put(setCategoryValues(action.category, catValues));
     } catch (e) {
         yield put(setError(e));
     }

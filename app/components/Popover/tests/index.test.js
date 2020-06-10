@@ -1,6 +1,6 @@
 /**
  *
- * Tests for IconWithPopover
+ * Tests for Popover
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -10,12 +10,12 @@ import React from 'react';
 import { render } from 'react-testing-library';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import IconWithPopover from '../index';
+import Popover from '../index';
 
-describe('<IconWithPopover />', () => {
+describe('<Popover />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    render(<IconWithPopover />);
+    render(<Popover />);
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -31,7 +31,7 @@ describe('<IconWithPopover />', () => {
   it.skip('Should render and match the snapshot', () => {
     const {
       container: { firstChild },
-    } = render(<IconWithPopover />);
+    } = render(<Popover />);
     expect(firstChild).toMatchSnapshot();
   });
 });

@@ -11,6 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DateToggle from '../../components/DateToggle';
 import IconWithMenu from '../../components/IconWithMenu';
 import Tag from '../../components/Tag';
+import Filters from './Filters';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -52,7 +53,7 @@ const Attributes = ({
     return (
         <Card elevation={3}>
             <CardContent>
-                {/* <Grid container className={classes.row}>
+                <Grid container className={classes.row}>
                     <Grid
                         item
                         xs={3}
@@ -65,14 +66,11 @@ const Attributes = ({
                         xs={9}
                         className={classes.content}
                     >
-                        <Button
-                            variant="contained"
-                            disableElevation
-                            className={classes.valueBtn}
-                        >Last 30 Days</Button>
-
+                        <Filters 
+                            addClass={classes.addBtn}
+                        />
                     </Grid>
-                </Grid> */}
+                </Grid>
                 <Grid container className={classes.row}>
                     <Grid
                         item
@@ -96,14 +94,14 @@ const Attributes = ({
                                     <Tag
                                         key={d}
                                         value={d}
-                                        onClick={removeDimension}
+                                        onCross={removeDimension}
                                     />
                                 );
                         })}
                         <IconWithMenu
                             icon={AddIcon}
                             iconClass={classes.addBtn}
-                            onItemClick={onItemClick}
+                            onItemClick={addDimension}
                             list={unselectedDimensions}
                         />
                     </Grid>
@@ -135,8 +133,10 @@ const mapStateToProps = (state, props) => {
     };
 };
 
-export default connect(mapStateToProps, {
-    addDimension,
-    removeDimension,
-    changeDateDimension
-})(Attributes);
+const mapDispatchToProps = dispatch => ({
+    addDimension: item => dispatch(addDimension(item.text)),
+    removeDimension: d => dispatch(removeDimension(d)),
+    changeDateDimension: d => dispatch(changeDateDimension(d)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Attributes);

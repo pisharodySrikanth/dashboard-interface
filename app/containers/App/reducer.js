@@ -38,7 +38,7 @@ const appReducer = (state = initialState, action) =>
                 draft.selectedCategory = action.category;
                 break;
             case SET_CATEGORY_VALUES:
-                draft.categoryData[draft.selectedCategory] = action.values;
+                draft.categoryData[action.category] = action.values;
                 break;
             case SET_CATEGORIES_URLS:
                 draft.categoryUrls = action.categoryUrls;
