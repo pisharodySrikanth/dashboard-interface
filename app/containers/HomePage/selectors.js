@@ -17,7 +17,7 @@ const selectCategoryUrls = createSelector(
 // );
 
 const selectCategoryKeys = (state) => {
-    const homePage = state.homePage || initialState;
+    const homePage = state.global || initialState;
 
     return Object.keys(homePage.categoryUrls);
 };

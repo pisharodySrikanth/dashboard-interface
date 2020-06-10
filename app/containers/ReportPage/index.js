@@ -4,7 +4,7 @@
  *
  */
 
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -20,10 +20,17 @@ import DateFnsUtils from '@date-io/date-fns';
 import reducer from './reducer';
 import saga from './saga';
 import Attributes from './Attributes';
+import {initializeReports} from './actions';
 
-export function ReportPage() {
+export function ReportPage({
+	initializeReports
+}) {
 	useInjectReducer({ key: 'reportPage', reducer });
 	useInjectSaga({ key: 'reportPage', saga });
+
+	useEffect(() => {
+		initializeReports();
+	}, []);
 
 	return (
 		<div>
@@ -31,10 +38,6 @@ export function ReportPage() {
 		</div>
 	);
 }
-
-ReportPage.propTypes = {
-	dispatch: PropTypes.func.isRequired,
-};
 
 const mapStateToProps = createStructuredSelector({
 	reportPage: makeSelectReportPage(),
@@ -48,7 +51,9 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(
 	mapStateToProps,
-	mapDispatchToProps,
+	{
+		initializeReports
+	},
 );
 
 export default compose(withConnect)(ReportPage);

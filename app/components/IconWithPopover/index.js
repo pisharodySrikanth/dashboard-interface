@@ -1,6 +1,6 @@
 /**
  *
- * Popover
+ * IconWithPopover
  *
  */
 
@@ -11,7 +11,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 
-function Popover({
+function IconWithPopover({
 	children,
 	anchorEl,
 	handleClose
@@ -34,13 +34,13 @@ function Popover({
 	);
 }
 
-Popover.defaultProps = {
+IconWithPopover.defaultProps = {
 	count: null,
 }
 
-Popover.propTypes = {
-	handleClose: PropTypes.func.isRequired,
-	anchorEl: PropTypes.node
+IconWithPopover.propTypes = {
+	// handleClose: PropTypes.func.isRequired,
+	// anchorEl: PropTypes.node
 };
 
-export default memo(Popover);
+export default memo(IconWithPopover);

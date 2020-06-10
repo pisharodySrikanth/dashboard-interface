@@ -17,7 +17,8 @@ import { initializeDashboard, changeValue } from './actions';
 import { changeCategory } from '../App/actions';
 import { initialState } from '../App/reducer';
 import reducer, { initialState as homeInitialState } from './reducer';
-import { selectCategoryKeys } from '../App/selectors';
+import { makeSelectCategoryKeys } from '../App/selectors';
+import {selectCategoryKeys} from './selectors'
 import saga from './saga';
 
 const useStyles = makeStyles((theme) => ({
@@ -121,26 +122,26 @@ function HomePage({
 }
 
 const mapStateToProps = (state, props) => {
-	const homePage = state.homePage || homeInitialState;
-	const app = state.global || initialState;
-	const {
-		selectedId
-	} = homePage;
-	const {
-		categoryData,
-		selectedCategory
-	} = app;
-	const values = categoryData[selectedCategory] || [];
-	const selectedValue = values.find(v => v.id == selectedId);
-
-	return {
-		...props,
-		categories: selectCategoryKeys(state),
-		values,
-		selectedCategory,
-		selectedId,
-		selectedValue
-	}
+		const homePage = state.homePage || homeInitialState;
+		const app = state.global || initialState;
+		const {
+			selectedId
+		} = homePage;
+		const {
+			categoryData,
+			selectedCategory
+		} = app;
+		const values = categoryData[selectedCategory] || [];
+		const selectedValue = values.find(v => v.id == selectedId);
+	
+		return {
+			...props,
+			categories: selectCategoryKeys(state),
+			values,
+			selectedCategory,
+			selectedId,
+			selectedValue
+		};
 };
 
 export default connect(mapStateToProps, {

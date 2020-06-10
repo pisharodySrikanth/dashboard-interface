@@ -1,6 +1,14 @@
-// import { take, call, put, select } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
+import { INITIALIZE_REPORTS } from './constants';
+import { setCategoryUrls } from '../App/actions';
+import { fetchCategories } from '../App/requests';
+
+function* initialize() {
+	const categories = yield call(fetchCategories);
+	yield put(setCategoryUrls(categories));
+}
 
 // Individual exports for testing
 export default function* reportPageSaga() {
-  // See example in containers/HomePage/saga.js
+	yield takeEvery(INITIALIZE_REPORTS, initialize);
 }

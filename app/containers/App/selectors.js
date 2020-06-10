@@ -13,9 +13,9 @@ const makeSelectLocation = () =>
  * Direct selector to the reportPage state domain
  */
 
-const selectHomePageDomain = state => state.global || initialState;
+const selectAppState = state => state.global || initialState;
 const selectCategoryUrls = createSelector(
-	selectHomePageDomain,
+	selectAppState,
 	homePage => homePage.categoryUrls
 );
 
@@ -24,11 +24,15 @@ const selectCategoryUrls = createSelector(
 //     categoryUrls => Object.keys(categoryUrls)
 // );
 
-const selectCategoryKeys = (state) => {
-	const global = state.global || initialState;
+const selectCatUrls = createSelector(
+	selectAppState,
+	global => global.categoryUrls
+);
 
-	return Object.keys(global.categoryUrls);
-};
+const makeSelectCategoryKeys = () => createSelector(
+	selectCatUrls,
+	urls => Object.keys(urls)
+);
 
 const selectCategoryUrl = (state, categoryKey) => {
 	const global = state.global || initialState;
@@ -66,8 +70,10 @@ const selectResource = (state, id) => {
 //   );
 
 export {
+	selectAppState,
 	makeSelectLocation,
-	selectCategoryKeys,
+	selectCatUrls,
+	makeSelectCategoryKeys,
 	selectCategoryUrl,
 	selectCategoryValues,
 	selectResource,

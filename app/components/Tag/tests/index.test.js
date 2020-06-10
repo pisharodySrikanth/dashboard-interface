@@ -1,6 +1,6 @@
 /**
  *
- * Tests for Popover
+ * Tests for Tag
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -10,12 +10,12 @@ import React from 'react';
 import { render } from 'react-testing-library';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import Popover from '../index';
+import Tag from '../index';
 
-describe('<Popover />', () => {
+describe('<Tag />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    render(<Popover />);
+    render(<Tag />);
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -31,7 +31,7 @@ describe('<Popover />', () => {
   it.skip('Should render and match the snapshot', () => {
     const {
       container: { firstChild },
-    } = render(<Popover />);
+    } = render(<Tag />);
     expect(firstChild).toMatchSnapshot();
   });
 });

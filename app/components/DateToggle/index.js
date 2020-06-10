@@ -17,7 +17,10 @@ const useStyles = makeStyles((theme) => ({
 		overflow: 'hidden',
 		width: '250px',
 		border: '1px solid',
-		borderColor: grey[300]
+		borderColor: grey[300],
+		'&:not(:last-child)': {
+			marginRight: '10px'
+		}
 	},
 	valueContainer: {
 		display: 'flex',

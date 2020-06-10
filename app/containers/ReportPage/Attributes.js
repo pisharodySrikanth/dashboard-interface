@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import { initialState } from './reducer';
+import { addDimension, removeDimension, changeDateDimension } from './actions';
+import { selectAppState } from '../App/selectors';
 import AddIcon from '@material-ui/icons/Add';
-import IconButton from '@material-ui/core/IconButton';
 import DateToggle from '../../components/DateToggle';
-import Button from '@material-ui/core/Button';
-import IconWithPopover from '../../components/IconWithPopover';
 import IconWithMenu from '../../components/IconWithMenu';
+import Tag from '../../components/Tag';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -30,21 +32,27 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         margin: '0 10px'
     },
-    valueBtn: {
-        fontWeight: 400
-    }
+
 }));
 
-const Attributes = props => {
-    const [dateDimension, setDateDimension] = useState('day');
+const Attributes = ({
+    dateDimension,
+    dimensions,
+    unselectedDimensions,
+    addDimension,
+    removeDimension,
+    changeDateDimension
+}) => {
     const classes = useStyles();
 
-    const onItemClick = item => console.log(item);
+    const onItemClick = item => {
+        addDimension(item.text);
+    };
 
     return (
         <Card elevation={3}>
             <CardContent>
-                <Grid container className={classes.row}>
+                {/* <Grid container className={classes.row}>
                     <Grid
                         item
                         xs={3}
@@ -64,7 +72,7 @@ const Attributes = props => {
                         >Last 30 Days</Button>
 
                     </Grid>
-                </Grid>
+                </Grid> */}
                 <Grid container className={classes.row}>
                     <Grid
                         item
@@ -78,21 +86,25 @@ const Attributes = props => {
                         xs={9}
                         className={classes.content}
                     >
-                        <DateToggle
-                            value={dateDimension}
-                            onChange={setDateDimension}
-                        />
+                        {dimensions.map(d => {
+                            return d === 'date' ? (
+                                <DateToggle
+                                    value={dateDimension}
+                                    onChange={changeDateDimension}
+                                />
+                            ) : (
+                                    <Tag
+                                        key={d}
+                                        value={d}
+                                        onClick={removeDimension}
+                                    />
+                                );
+                        })}
                         <IconWithMenu
                             icon={AddIcon}
                             iconClass={classes.addBtn}
                             onItemClick={onItemClick}
-                            list={[{
-                                text: 'vehicles'
-                            }, {
-                                text: 'people'
-                            }, {
-                                text: 'films'
-                            }]}
+                            list={unselectedDimensions}
                         />
                     </Grid>
                 </Grid>
@@ -101,4 +113,30 @@ const Attributes = props => {
     );
 }
 
-export default Attributes;
+const mapStateToProps = (state, props) => {
+    //TO BE OPTIMIZED BY RESELECT
+    const global = selectAppState(state);
+    const reportPage = state.reportPage || initialState;
+    const dimensions = reportPage.dimensions;
+
+    const allDimensions = Object.keys(global.categoryUrls);
+
+    let unselectedDimensions = allDimensions.filter(d => !dimensions.includes(d));
+
+    if (!reportPage.dateDimension) {
+        unselectedDimensions.unshift('date');
+    }
+
+    return {
+        ...props,
+        dateDimension: reportPage.dateDimension,
+        dimensions,
+        unselectedDimensions: unselectedDimensions.map(d => ({ text: d }))
+    };
+};
+
+export default connect(mapStateToProps, {
+    addDimension,
+    removeDimension,
+    changeDateDimension
+})(Attributes);

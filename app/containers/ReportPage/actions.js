@@ -4,10 +4,31 @@
  *
  */
 
-import { DEFAULT_ACTION } from './constants';
+import { INITIALIZE_REPORTS, ADD_DIMENSION, REMOVE_DIMENSION, CHANGE_DATE_DIMENSION } from './constants';
 
-export function defaultAction() {
-  return {
-    type: DEFAULT_ACTION,
-  };
+export function initializeReports() {
+	return {
+		type: INITIALIZE_REPORTS,
+	};
+}
+
+export function addDimension(dimension) {
+	return {
+		type: ADD_DIMENSION,
+		dimension
+	}
+}
+
+export function removeDimension(dimension) {
+	return {
+		type: REMOVE_DIMENSION,
+		dimension
+	}
+}
+
+export function changeDateDimension(dimension) {
+	return {
+		type: CHANGE_DATE_DIMENSION,
+		dimension
+	}
 }
