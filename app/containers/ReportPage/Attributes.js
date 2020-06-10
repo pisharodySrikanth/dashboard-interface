@@ -5,13 +5,14 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { initialState } from './reducer';
-import { addDimension, removeDimension, changeDateDimension } from './actions';
+import { addDimension, removeDimension, changeDateDimension, applyParams } from './actions';
 import { selectAppState } from '../App/selectors';
 import AddIcon from '@material-ui/icons/Add';
 import DateToggle from '../../components/DateToggle';
 import IconWithMenu from '../../components/IconWithMenu';
 import Tag from '../../components/Tag';
 import Filters from './Filters';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -33,7 +34,12 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         margin: '0 10px'
     },
-
+    saveBtn: {
+        marginRight: '10px'
+    },
+    btnContainer: {
+        marginTop: '10px'
+    }
 }));
 
 const Attributes = ({
@@ -42,13 +48,10 @@ const Attributes = ({
     unselectedDimensions,
     addDimension,
     removeDimension,
-    changeDateDimension
+    changeDateDimension,
+    applyParams
 }) => {
     const classes = useStyles();
-
-    const onItemClick = item => {
-        addDimension(item.text);
-    };
 
     return (
         <Card elevation={3}>
@@ -106,6 +109,16 @@ const Attributes = ({
                         />
                     </Grid>
                 </Grid>
+                <div className={classes.btnContainer}>
+                    <Button 
+                        variant="contained" 
+                        color="primary"
+                        className={classes.saveBtn}
+                        onClick={applyParams}
+                    >
+                        Save
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     );
@@ -137,6 +150,7 @@ const mapDispatchToProps = dispatch => ({
     addDimension: item => dispatch(addDimension(item.text)),
     removeDimension: d => dispatch(removeDimension(d)),
     changeDateDimension: d => dispatch(changeDateDimension(d)),
-})
+    applyParams: d => dispatch(applyParams(d))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Attributes);

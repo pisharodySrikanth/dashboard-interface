@@ -4,13 +4,12 @@
  *
  */
 import produce from 'immer';
-import { ADD_DIMENSION, REMOVE_DIMENSION, CHANGE_DATE_DIMENSION, SET_CATEGORY_FILTER, REMOVE_FILTER } from './constants';
+import { ADD_DIMENSION, REMOVE_DIMENSION, CHANGE_DATE_DIMENSION, SET_CATEGORY_FILTER, REMOVE_FILTER, SET_START_DATE, SET_END_DATE } from './constants';
 
 export const initialState = {
-	filters: {
-		// start: '',
-		// end: ''
-	},
+	startDate: new Date(),
+	endDate: new Date(),
+	filters: {},
 	dateDimension: 'day',
 	dimensions: ['date']
 };
@@ -36,6 +35,12 @@ const reportPageReducer = (state = initialState, action) =>
 				break;
 			case REMOVE_FILTER:
 				delete draft.filters[action.key];
+				break;
+			case SET_START_DATE:
+				draft.startDate = action.date;
+				break;
+			case SET_END_DATE:
+				draft.endDate = action.date;
 				break;
 		}
 	});

@@ -1,42 +1,60 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { selectAppState } from '../App/selectors';
-import { setCategoryFilter, removeFilter } from './actions';
+import { setCategoryFilter, removeFilter, setStartDate, setEndDate } from './actions';
 import Tag from '../../components/Tag';
 import AddIcon from '@material-ui/icons/Add';
 import IconWithMenu from '../../components/IconWithMenu';
 import FilterValues from './FilterValues';
+import {
+    DatePicker,
+    MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import { initialState } from './reducer';
 import { changeCategory } from '../App/actions';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    date: {
+        marginRight: '10px'
+    }
+}));
 
 const Filters = ({
     categoryData,
     filters,
     categories,
+    startDate,
+    endDate,
     addClass,
     setCategoryFilter,
-    removeFilter
+    removeFilter,
+    setStartDate, 
+    setEndDate
 }) => {
+    const today = new Date();
     const [openFilter, setOpenFilter] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const anchors = useRef({});
+    const classes = useStyles();
 
     useEffect(() => {
         let empty;
 
-        for(let key in filters) {
-            if(filters[key].length === 0) {
+        for (let key in filters) {
+            if (filters[key].length === 0) {
                 empty = key;
                 break;
             }
         }
-        
-        if(empty && anchors.current[empty]) {
+
+        if (empty && anchors.current[empty]) {
             toggleFilter(empty);
         }
     }, [filters]);
 
-    const toggleFilter = (key=null) => {
+    const toggleFilter = (key = null) => {
         setOpenFilter(key);
         setAnchorEl(key ? anchors.current[key] : null);
     }
@@ -51,13 +69,13 @@ const Filters = ({
 
     const handleClose = () => {
         toggleFilter();
-        if(filters[openFilter].length === 0) {
+        if (filters[openFilter].length === 0) {
             removeFilter(openFilter);
         }
     }
 
     const setFilters = (list) => {
-        if(list.length) {
+        if (list.length) {
             setCategoryFilter(openFilter, list);
         } else {
             removeFilter(openFilter);
@@ -71,7 +89,26 @@ const Filters = ({
     }
 
     return (
-        <>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <DatePicker 
+                label='Start Date'
+                value={startDate} 
+                onChange={setStartDate} 
+                variant='inline' 
+                autoOk
+                maxDate={endDate}
+                className={classes.date}
+            />
+            <DatePicker 
+                label='End Date'
+                value={endDate} 
+                onChange={setEndDate} 
+                variant='inline' 
+                autoOk
+                minDate={startDate}
+                maxDate={today}
+                className={classes.date}
+            />
             {Object.keys(filters).map(f => (
                 <Tag
                     key={f}
@@ -96,7 +133,7 @@ const Filters = ({
                     handleClose={handleClose}
                 />
             )}
-        </>
+        </MuiPickersUtilsProvider>
     );
 };
 
@@ -110,16 +147,19 @@ const mapStateToProps = (state, props) => {
 
     return {
         ...props,
-        filterList: Object.keys(filters),
         filters,
         selectedCategory: global.selectedCategory,
         categories: unselectedCategories.map(c => ({ text: c })),
-        categoryData: global.categoryData
+        categoryData: global.categoryData,
+        startDate: reportPage.startDate,
+        endDate: reportPage.endDate
     };
 };
 
 export default connect(mapStateToProps, {
     setCategoryFilter,
     changeCategory,
-    removeFilter
+    removeFilter,
+    setStartDate, 
+    setEndDate
 })(Filters);
