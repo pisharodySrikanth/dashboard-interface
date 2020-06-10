@@ -49,7 +49,8 @@ const Attributes = ({
     addDimension,
     removeDimension,
     changeDateDimension,
-    applyParams
+    applyParams,
+    removeDateDimension
 }) => {
     const classes = useStyles();
 
@@ -92,6 +93,7 @@ const Attributes = ({
                                 <DateToggle
                                     value={dateDimension}
                                     onChange={changeDateDimension}
+                                    onCross={removeDateDimension}
                                 />
                             ) : (
                                     <Tag
@@ -130,13 +132,9 @@ const mapStateToProps = (state, props) => {
     const reportPage = state.reportPage || initialState;
     const dimensions = reportPage.dimensions;
 
-    const allDimensions = Object.keys(global.categoryUrls);
+    const allDimensions = Object.keys(global.categoryUrls).concat(['date']);
 
     let unselectedDimensions = allDimensions.filter(d => !dimensions.includes(d));
-
-    if (!reportPage.dateDimension) {
-        unselectedDimensions.unshift('date');
-    }
 
     return {
         ...props,
@@ -149,6 +147,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => ({
     addDimension: item => dispatch(addDimension(item.text)),
     removeDimension: d => dispatch(removeDimension(d)),
+    removeDateDimension: () => dispatch(removeDimension('date')),
     changeDateDimension: d => dispatch(changeDateDimension(d)),
     applyParams: d => dispatch(applyParams(d))
 });

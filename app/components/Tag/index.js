@@ -52,6 +52,7 @@ function Tag({
 			{value}
 			{onCross && (
 				<IconButton 
+					component='div'
 					aria-label="delete"
 					className={classes.cross}
 					onClick={handleCrossClick}
