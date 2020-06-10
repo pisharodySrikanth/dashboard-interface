@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../../config';
 import format from 'date-fns/format';
+import QueryString from 'query-string';
 
 export const fetchReports = (params) => {
     const dateFormat = 'yyyy-MM-dd';
@@ -26,5 +27,5 @@ export const fetchReports = (params) => {
 
     console.log(req);
 
-    return Promise.resolve();
+    return axios.get(`${config.phpBase}/impressions?${QueryString.stringify(req)}`).then(r => r.data);
 }

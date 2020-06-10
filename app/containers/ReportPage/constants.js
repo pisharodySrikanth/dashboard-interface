@@ -13,3 +13,4 @@ export const REMOVE_FILTER = 'app/ReportPage/REMOVE_FILTER';
 export const SET_START_DATE = 'app/ReportPage/SET_START_DATE';
 export const SET_END_DATE = 'app/ReportPage/SET_END_DATE';
 export const APPLY_PARAMS = 'app/ReportPage/APPLY_PARAMS';
+export const SET_REPORT_DATA = 'app/ReportPage/SET_REPORT_DATA';

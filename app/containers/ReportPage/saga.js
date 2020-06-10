@@ -1,9 +1,10 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { INITIALIZE_REPORTS, SET_CATEGORY_FILTER, APPLY_PARAMS } from './constants';
-import { setCategoryUrls } from '../App/actions';
+import { setCategoryUrls, setError } from '../App/actions';
 import { fetchCategories } from '../App/requests';
-import {getValues} from '../App/saga';
+import { getValues } from '../App/saga';
 import { fetchReports } from './requests';
+import { setReportData } from './actions';
 
 function* initialize() {
 	const categories = yield call(fetchCategories);
@@ -20,7 +21,15 @@ function* setReports() {
 	const state = yield select();
 	console.log(state);
 	console.log('fetching...');
-	const response = yield call(fetchReports, state.reportPage);
+	let response;
+
+	try {
+		response = yield call(fetchReports, state.reportPage);
+	} catch (e) {
+		yield put(setError(e));
+	}
+
+	yield put(setReportData(response.data));
 }
 
 // Individual exports for testing

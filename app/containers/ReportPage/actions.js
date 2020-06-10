@@ -4,7 +4,7 @@
  *
  */
 
-import { INITIALIZE_REPORTS, ADD_DIMENSION, REMOVE_DIMENSION, CHANGE_DATE_DIMENSION, SET_CATEGORY_FILTER, REMOVE_FILTER, SET_START_DATE, SET_END_DATE, APPLY_PARAMS } from './constants';
+import { INITIALIZE_REPORTS, ADD_DIMENSION, REMOVE_DIMENSION, CHANGE_DATE_DIMENSION, SET_CATEGORY_FILTER, REMOVE_FILTER, SET_START_DATE, SET_END_DATE, APPLY_PARAMS, SET_REPORT_DATA } from './constants';
 
 export function initializeReports() {
 	return {
@@ -66,4 +66,11 @@ export function applyParams() {
 	return {
 		type: APPLY_PARAMS
 	};
+}
+
+export function setReportData(data) {
+	return {
+		type: SET_REPORT_DATA,
+		data
+	}
 }

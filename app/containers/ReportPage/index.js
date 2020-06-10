@@ -9,17 +9,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { 
-	MuiPickersUtilsProvider,
-	DatePicker
-} from '@material-ui/pickers';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectReportPage from './selectors';
-import DateFnsUtils from '@date-io/date-fns';
 import reducer from './reducer';
 import saga from './saga';
 import Attributes from './Attributes';
+import ReportTable from './ReportTable';
 import {initializeReports} from './actions';
 
 export function ReportPage({
@@ -35,6 +31,7 @@ export function ReportPage({
 	return (
 		<div>
 			<Attributes />
+			<ReportTable />
 		</div>
 	);
 }
