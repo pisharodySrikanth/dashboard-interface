@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, forwardRef } from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -33,7 +33,7 @@ function Tag({
 	value,
 	onClick,
 	onCross
-}) {
+}, ref) {
 	const classes = useStyles();
 
 	const handleCrossClick = e => {
@@ -46,6 +46,7 @@ function Tag({
 			variant="contained"
 			disableElevation
 			className={classes.tag}
+			ref={ref}
 			onClick={e => onClick && onClick(e, value)}
 		>
 			{value}
@@ -64,4 +65,4 @@ function Tag({
 
 Tag.propTypes = {};
 
-export default memo(Tag);
+export default forwardRef(Tag);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { selectAppState } from '../App/selectors';
 import { setCategoryFilter, removeFilter } from './actions';
@@ -19,10 +19,30 @@ const Filters = ({
 }) => {
     const [openFilter, setOpenFilter] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
+    const anchors = useRef({});
+
+    useEffect(() => {
+        let empty;
+
+        for(let key in filters) {
+            if(filters[key].length === 0) {
+                empty = key;
+                break;
+            }
+        }
+        
+        if(empty && anchors.current[empty]) {
+            toggleFilter(empty);
+        }
+    }, [filters]);
+
+    const toggleFilter = (key=null) => {
+        setOpenFilter(key);
+        setAnchorEl(key ? anchors.current[key] : null);
+    }
 
     const onTagClick = (e, val) => {
-        setAnchorEl(e.currentTarget);
-        setOpenFilter(val);
+        toggleFilter(val);
     }
 
     const onItemClick = i => {
@@ -30,19 +50,23 @@ const Filters = ({
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
-        setOpenFilter(null);
+        toggleFilter();
+        if(filters[openFilter].length === 0) {
+            removeFilter(openFilter);
+        }
     }
 
     const setFilters = (list) => {
-        setCategoryFilter(openFilter, list);
-        setOpenFilter(null);
-        setAnchorEl(null);
+        if(list.length) {
+            setCategoryFilter(openFilter, list);
+        } else {
+            removeFilter(openFilter);
+        }
+        toggleFilter();
     }
 
     const handleFilterCross = value => {
-        setOpenFilter(null);
-        setAnchorEl(null);
+        toggleFilter();
         removeFilter(value);
     }
 
@@ -52,6 +76,7 @@ const Filters = ({
                 <Tag
                     key={f}
                     value={f}
+                    ref={i => anchors.current[f] = i}
                     onClick={onTagClick}
                     onCross={handleFilterCross}
                 />
