@@ -4,13 +4,15 @@
  *
  */
 
-import React, { memo, useRef } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
-import IconWithPopover from '../IconWithPopover';
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
+import Popover from '../Popover';
 
 const useStyles = makeStyles(theme => ({
 	menu: {
@@ -38,43 +40,65 @@ function IconWithMenu({
 	count,
 	list,
 	onItemClick,
-	icon
+	icon:Icon
 }) {
+	const [anchorEl, setAnchorEl] = useState(null);
 	const classes = useStyles();
-	const popoverRef = useRef();
-	
+
 	const onMenuItemClick = (item) => {
-		popoverRef.current.close();
+		setAnchorEl(null);
 		onItemClick(item);
 	}
 
+	const handleClick = useCallback((event) => {
+		setAnchorEl(event.currentTarget);
+	}, []);
+
+	const handleClose = useCallback(() => {
+		setAnchorEl(null);
+	}, []);
+
 	return (
-		<IconWithPopover
-			count={count}
-			icon={icon}
-			iconClass={iconClass}
-			ref={popoverRef}
-		>
-			<MenuList
-				classes={{
-					root: classes.menu
-				}}
+		<>
+			<IconButton
+				className={iconClass}
+				onClick={handleClick}
 			>
-				{list.map(item => item.type == 'divider' ? (
-					<Divider className={classes.divider} />
-				) : (
-						<MenuItem
-							key={item.text || item.type}
-							onClick={() => onMenuItemClick(item)}
-							classes={{
-								root: classes.item
-							}}
-						>
-							{item.text}
-						</MenuItem>
-					))}
-			</MenuList>
-		</IconWithPopover>
+				<Badge
+					badgeContent={count}
+					color='secondary'
+				>
+					<Icon />
+				</Badge>
+			</IconButton>
+			<Popover
+				anchorEl={anchorEl}
+				handleClose={handleClose}
+			>
+				<MenuList
+					classes={{
+						root: classes.menu
+					}}
+				>
+					{list.map((item, index) => item.type == 'divider' ? (
+						<Divider 
+							className={classes.divider} 
+							key={`divider${index}`}
+						/>
+					) : (
+							<MenuItem
+								key={item.text || item.type}
+								onClick={() => onMenuItemClick(item)}
+								classes={{
+									root: classes.item
+								}}
+							>
+								{item.text}
+							</MenuItem>
+						))}
+				</MenuList>
+			</Popover>
+		</>
 	);
 }
 

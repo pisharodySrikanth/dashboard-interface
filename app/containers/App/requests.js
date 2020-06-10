@@ -7,7 +7,7 @@ export const fetchCategories = () => {
 
 export const fetchValues = (fetchUrl, categoryUrl) => {
     return fetchValueSet(fetchUrl, categoryUrl).then(({ next, results = [] }) => {
-        if (true || !next) {
+        if (!next) {
             return results;
         }
         
