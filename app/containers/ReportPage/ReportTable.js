@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const ReportTable = ({
     data
 }) => {
-    if(!data) {
+    if(!data || !data.length) {
         return null;
     }
 

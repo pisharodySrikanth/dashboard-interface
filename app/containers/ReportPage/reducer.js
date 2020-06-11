@@ -20,6 +20,7 @@ const reportPageReducer = (state = initialState, action) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case ADD_DIMENSION:
+				draft.dimensions = draft.dimensions.filter(i => i === 'date');
 				draft.dimensions.push(action.dimension);
 				break;
 			case REMOVE_DIMENSION:
