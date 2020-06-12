@@ -4,30 +4,36 @@
  *
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { initializeChart } from './actions';
 import makeSelectVisualisationPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+import Attributes from './Attributes';
+import ChartContainer from './ChartContainer';
 
-export function VisualisationPage() {
+export function VisualisationPage({ initializeChart }) {
   useInjectReducer({ key: 'visualisationPage', reducer });
   useInjectSaga({ key: 'visualisationPage', saga });
+
+  useEffect(() => {
+    initializeChart();
+  }, []);
 
   return (
     <div>
       <Helmet>
-        <title>VisualisationPage</title>
-        <meta name="description" content="Description of VisualisationPage" />
+        <title>Visualisation</title>
       </Helmet>
-      Visualisation Page
+      <Attributes />
+      <ChartContainer />
     </div>
   );
 }
@@ -43,6 +49,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
+    initializeChart: () => dispatch(initializeChart()),
   };
 }
 
