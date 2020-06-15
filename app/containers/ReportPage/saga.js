@@ -1,5 +1,9 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { INITIALIZE_REPORTS, SET_CATEGORY_FILTER, APPLY_PARAMS } from './constants';
+import {
+  INITIALIZE_REPORTS,
+  SET_CATEGORY_FILTER,
+  APPLY_PARAMS,
+} from './constants';
 import { setCategoryUrls, setError } from '../App/actions';
 import { fetchCategories } from '../App/requests';
 import { getValues } from '../App/saga';
@@ -7,34 +11,32 @@ import { fetchReports } from './requests';
 import { setReportData } from './actions';
 
 function* initialize() {
-	const categories = yield call(fetchCategories);
-	yield put(setCategoryUrls(categories));
+  const categories = yield call(fetchCategories);
+  yield put(setCategoryUrls(categories));
 }
 
 function* fetchCategoryData(action) {
-	yield call(getValues, {
-		category: action.key
-	});
+  yield call(getValues, {
+    category: action.key,
+  });
 }
 
 function* setReports() {
-	const state = yield select();
-	console.log(state);
-	console.log('fetching...');
-	let response;
+  const state = yield select();
+  let response;
 
-	try {
-		response = yield call(fetchReports, state.reportPage);
-	} catch (e) {
-		yield put(setError(e));
-	}
+  try {
+    response = yield call(fetchReports, state.reportPage);
+  } catch (e) {
+    yield put(setError(e));
+  }
 
-	yield put(setReportData(response.data));
+  yield put(setReportData(response.data));
 }
 
 // Individual exports for testing
 export default function* reportPageSaga() {
-	yield takeEvery(INITIALIZE_REPORTS, initialize);
-	yield takeEvery(SET_CATEGORY_FILTER, fetchCategoryData);
-	yield takeEvery(APPLY_PARAMS, setReports);
+  yield takeEvery(INITIALIZE_REPORTS, initialize);
+  yield takeEvery(SET_CATEGORY_FILTER, fetchCategoryData);
+  yield takeEvery(APPLY_PARAMS, setReports);
 }

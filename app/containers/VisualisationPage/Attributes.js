@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,13 +10,7 @@ import Dropdown from '../../components/Dropdown';
 import DateToggle from '../../components/DateToggle';
 import { selectAppState } from '../App/selectors';
 import { initialState } from './reducer';
-import {
-  setStartDate,
-  setEndDate,
-  setCategory,
-  setGranularity,
-  applyParams,
-} from './actions';
+import { applyParams } from './actions';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -44,21 +38,38 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Attributes = ({
-  start,
-  end,
-  setStartDate,
-  setEndDate,
-  setCategory,
-  setGranularity,
   applyParams,
-  category,
   categories,
-  granularity,
+  granularity: parentGranularity,
+  start: parentStart,
+  end: parentEnd,
 }) => {
   const today = Date.now();
   const classes = useStyles();
+  const [start, setStart] = useState(new Date());
+  const [end, setEnd] = useState(new Date());
+  const [category, setCategory] = useState('');
+  const [granularity, setGranularity] = useState(parentGranularity);
+
+  useEffect(() => {
+    setGranularity(parentGranularity);
+  }, [parentGranularity]);
+
+  useEffect(() => {
+    setStart(parentStart);
+    setEnd(parentEnd);
+  }, [parentStart, parentEnd]);
 
   const onCatChange = useCallback(e => setCategory(e.target.value), []);
+
+  const handleBtnClick = () => {
+    applyParams({
+      start,
+      end,
+      category,
+      granularity,
+    });
+  };
 
   return (
     <Card elevation={3}>
@@ -71,7 +82,7 @@ const Attributes = ({
             <DatePicker
               label="Start Date"
               value={start}
-              onChange={setStartDate}
+              onChange={setStart}
               variant="inline"
               autoOk
               maxDate={end}
@@ -80,7 +91,7 @@ const Attributes = ({
             <DatePicker
               label="End Date"
               value={end}
-              onChange={setEndDate}
+              onChange={setEnd}
               variant="inline"
               autoOk
               minDate={start}
@@ -116,7 +127,7 @@ const Attributes = ({
             variant="contained"
             color="primary"
             className={classes.saveBtn}
-            onClick={applyParams}
+            onClick={handleBtnClick}
           >
             Save
           </Button>
@@ -141,10 +152,6 @@ const mapStateToProps = (state, props) => {
 export default connect(
   mapStateToProps,
   {
-    setStartDate,
-    setEndDate,
-    setCategory,
-    setGranularity,
     applyParams,
   },
 )(Attributes);
