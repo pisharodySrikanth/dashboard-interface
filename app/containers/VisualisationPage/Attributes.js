@@ -132,6 +132,7 @@ const Attributes = ({
             variant="contained"
             color="primary"
             className={classes.saveBtn}
+            disabled={!Boolean(category)}
             onClick={handleBtnClick}
           >
             Save

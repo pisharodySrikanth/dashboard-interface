@@ -103,6 +103,7 @@ const Attributes = ({
           <Button
             variant="contained"
             color="primary"
+            disabled={dimensions.length === 0}
             className={classes.saveBtn}
             onClick={applyParams}
           >
