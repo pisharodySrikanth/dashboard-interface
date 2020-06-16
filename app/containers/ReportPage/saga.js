@@ -9,6 +9,7 @@ import { fetchCategories } from '../App/requests';
 import { getValues } from '../App/saga';
 import { fetchReports } from './requests';
 import { setReportData } from './actions';
+import {selectReportPageDomain} from './selectors';
 
 function* initialize() {
   const categories = yield call(fetchCategories);
@@ -22,11 +23,11 @@ function* fetchCategoryData(action) {
 }
 
 function* setReports() {
-  const state = yield select();
+  const reportPage = yield select(selectReportPageDomain);
   let response;
 
   try {
-    response = yield call(fetchReports, state.reportPage);
+    response = yield call(fetchReports, reportPage);
   } catch (e) {
     yield put(setError(e));
   }

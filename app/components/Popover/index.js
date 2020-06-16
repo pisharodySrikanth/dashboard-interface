@@ -5,7 +5,6 @@
  */
 
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
@@ -37,10 +36,5 @@ function Popover({
 Popover.defaultProps = {
 	count: null,
 }
-
-Popover.propTypes = {
-	// handleClose: PropTypes.func.isRequired,
-	// anchorEl: PropTypes.node
-};
 
 export default memo(Popover);

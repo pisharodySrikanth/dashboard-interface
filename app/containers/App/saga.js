@@ -1,19 +1,19 @@
-import { take, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-
-import { setCategoryUrls, setCategoryValues, setCategoryData } from './actions';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { setCategoryValues } from './actions';
 import { setError } from '../App/actions';
-import { CHANGE_CATEGORY, INITIALIZE_CATEGORY, CHANGE_VALUE, SET_CATEGORY_DATA } from './constants';
-import { selectCategoryUrl, selectCategoryValues, selectCategory, selectResource } from './selectors';
-import {fetchCategories, fetchValues} from './requests';
+import { CHANGE_CATEGORY } from './constants';
+import { getCategoryUrls, getCatValues } from './selectors';
+import { fetchValues } from './requests';
 
 export function* getValues(action) {
-    const catValues = yield select(selectCategoryValues, action.category);
+    const catValues = yield select(getCatValues, action.category);
 
     if (catValues.length) {
         return;
     }
 
-    const categoryUrl = yield select(selectCategoryUrl, action.category);
+    const categoryUrls = yield select(getCategoryUrls);
+    const categoryUrl = categoryUrls[action.category];
     try {
         const catValues = yield call(fetchValues, categoryUrl, categoryUrl);
 

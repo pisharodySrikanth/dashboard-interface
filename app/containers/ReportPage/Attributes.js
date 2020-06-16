@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -6,14 +7,17 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
-import { initialState } from './reducer';
 import {
   addDimension,
   removeDimension,
   changeDateDimension,
   applyParams,
 } from './actions';
-import { selectAppState } from '../App/selectors';
+import {
+  makeSelectDateDimension,
+  makeSelectDimensions,
+  makeGetUnselectedDimensions
+} from './selectors';
 import DateToggle from '../../components/DateToggle';
 import IconWithMenu from '../../components/IconWithMenu';
 import Tag from '../../components/Tag';
@@ -67,7 +71,7 @@ const Attributes = ({
             Filters
           </Grid>
           <Grid item xs={9} className={classes.content}>
-            <Filters addClass={classes.addBtn} />
+            <Filters />
           </Grid>
         </Grid>
         <Grid container className={classes.row}>
@@ -84,8 +88,8 @@ const Attributes = ({
                   onCross={removeDateDimension}
                 />
               ) : (
-                <Tag key={d} value={d} onCross={removeDimension} />
-              ),
+                  <Tag key={d} value={d} onCross={removeDimension} />
+                ),
             )}
             <IconWithMenu
               icon={AddIcon}
@@ -110,25 +114,11 @@ const Attributes = ({
   );
 };
 
-const mapStateToProps = (state, props) => {
-  // TO BE OPTIMIZED BY RESELECT
-  const global = selectAppState(state);
-  const reportPage = state.reportPage || initialState;
-  const { dimensions } = reportPage;
-
-  const allDimensions = Object.keys(global.categoryUrls).concat(['date']);
-
-  const unselectedDimensions = allDimensions.filter(
-    d => !dimensions.includes(d),
-  );
-
-  return {
-    ...props,
-    dateDimension: reportPage.dateDimension,
-    dimensions,
-    unselectedDimensions: unselectedDimensions.map(d => ({ text: d })),
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  dateDimension: makeSelectDateDimension(),
+  dimensions: makeSelectDimensions(),
+  unselectedDimensions: makeGetUnselectedDimensions(),
+});
 
 const mapDispatchToProps = dispatch => ({
   addDimension: item => dispatch(addDimension(item.text)),

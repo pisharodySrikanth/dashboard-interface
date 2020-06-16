@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
@@ -8,8 +9,8 @@ import { DatePicker } from '@material-ui/pickers';
 import Button from '@material-ui/core/Button';
 import Dropdown from '../../components/Dropdown';
 import DateToggle from '../../components/DateToggle';
-import { selectAppState } from '../App/selectors';
-import { initialState } from './reducer';
+import makeSelectVisualisationPage from './selectors';
+import { makeSelectCategoryKeys } from '../App/selectors';
 import { applyParams } from './actions';
 
 const useStyles = makeStyles(theme => ({
@@ -40,10 +41,14 @@ const useStyles = makeStyles(theme => ({
 const Attributes = ({
   applyParams,
   categories,
-  granularity: parentGranularity,
-  start: parentStart,
-  end: parentEnd,
+  visualisationPage
 }) => {
+  const {
+    granularity: parentGranularity,
+    start: parentStart,
+    end: parentEnd,
+  } = visualisationPage;
+
   const today = Date.now();
   const classes = useStyles();
   const [start, setStart] = useState(new Date());
@@ -137,17 +142,10 @@ const Attributes = ({
   );
 };
 
-const mapStateToProps = (state, props) => {
-  // TO BE OPTIMIZED BY RESELECT
-  const global = selectAppState(state);
-  const visualisationPage = state.visualisationPage || initialState;
-
-  return {
-    ...props,
-    ...visualisationPage,
-    categories: Object.keys(global.categoryUrls),
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  visualisationPage: makeSelectVisualisationPage(),
+  categories: makeSelectCategoryKeys()
+});
 
 export default connect(
   mapStateToProps,

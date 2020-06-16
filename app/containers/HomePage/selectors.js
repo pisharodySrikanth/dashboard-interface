@@ -1,66 +1,23 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
-
-/**
- * Direct selector to the reportPage state domain
- */
+import { makeGetSelectedCatValues } from '../App/selectors';
 
 const selectHomePageDomain = state => state.homePage || initialState;
-const selectCategoryUrls = createSelector(
-    selectHomePageDomain,
-    homePage => homePage.categoryUrls
+
+const makeGetSelectedId = () => createSelector(
+  selectHomePageDomain,
+  state => state.selectedId
 );
-    
-// const selectCategoryKeys = createSelector(
-//     state => state.categoryUrls,
-//     categoryUrls => Object.keys(categoryUrls)
-// );
 
-const selectCategoryKeys = (state) => {
-    const homePage = state.global || initialState;
+const makeGetSelectedValue = () => createSelector(
+  makeGetSelectedId(),
+  makeGetSelectedCatValues(),
+  (selectedId, values) => {
+    return values.find(v => v.id == selectedId);
+  }
+)
 
-    return Object.keys(homePage.categoryUrls);
-};
-
-const selectCategoryUrl = (state, categoryKey) => {
-    const homePage = state.homePage || initialState;
-
-    return homePage.categoryUrls[categoryKey] || ''; 
-}
-
-const selectCategoryValues = (state, categoryKey) => {
-    const homePage = state.homePage || initialState;
-
-    return homePage.categoryData[categoryKey] || []; 
-}
-
-const selectCategory = state => state.homePage.selectedCategory;
-
-const selectResource = (state, id) => {
-    const homePage = state.homePage || initialState;
-
-    const resources = homePage.categoryData[homePage.selectedCategory] || []; 
-
-    return resources.find(r => r.id === id);
-}
-/**
- * Other specific selectors
- */
-
-/**
- * Default selector used by ReportPage
- */
-
-// const makeSelectReportPage = () =>
-//   createSelector(
-//     selectReportPageDomain,
-//     substate => substate,
-//   );
-
-export { 
-    selectCategoryKeys,
-    selectCategoryUrl,
-    selectCategoryValues,
-    selectResource,
-    selectCategory
+export {
+  makeGetSelectedId,
+  makeGetSelectedValue,
 };

@@ -5,13 +5,10 @@
  */
 
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectReportPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import Attributes from './Attributes';
@@ -36,18 +33,8 @@ export function ReportPage({
 	);
 }
 
-const mapStateToProps = createStructuredSelector({
-	reportPage: makeSelectReportPage(),
-});
-
-function mapDispatchToProps(dispatch) {
-	return {
-		dispatch,
-	};
-}
-
 const withConnect = connect(
-	mapStateToProps,
+	null,
 	{
 		initializeReports
 	},

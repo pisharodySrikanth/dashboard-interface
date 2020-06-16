@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,8 +8,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { initialState } from './reducer';
 import { makeStyles } from '@material-ui/core/styles';
+import {makeSelectReportData} from './selectors';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,14 +73,8 @@ const ReportTable = ({
     );
 }
 
-const mapStateToProps = (state, props) => {
-    //TO BE OPTIMIZED BY RESELECT
-    const reportPage = state.reportPage || initialState;
-
-    return {
-        ...props,
-        data: reportPage.reportData
-    };
-};
+const mapStateToProps = createStructuredSelector({
+    data: makeSelectReportData()
+});
 
 export default connect(mapStateToProps)(ReportTable);

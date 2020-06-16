@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
 import { DatePicker } from '@material-ui/pickers';
 import { makeStyles } from '@material-ui/core/styles';
-import { selectAppState } from '../App/selectors';
+import { getSelectedCategory, getCategoryData } from '../App/selectors';
+import makeSelectReportPage, {
+  makeGetUnselectedCategories,
+  makeSelectFilters
+} from './selectors';
 import {
   setCategoryFilter,
   removeFilter,
@@ -20,20 +25,28 @@ const useStyles = makeStyles(theme => ({
   date: {
     marginRight: '10px',
   },
+  addBtn: {
+    width: '40px',
+    height: '40px',
+    padding: 0,
+    margin: '0 10px',
+  }
 }));
 
 const Filters = ({
   categoryData,
   filters,
   categories,
-  startDate,
-  endDate,
-  addClass,
+  reportPage,
   setCategoryFilter,
   removeFilter,
   setStartDate,
   setEndDate,
 }) => {
+  const {
+    startDate,
+    endDate
+  } = reportPage;
   const today = new Date();
   const [openFilter, setOpenFilter] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -89,8 +102,6 @@ const Filters = ({
     removeFilter(value);
   };
 
-  console.log(startDate, endDate);
-
   return (
     <>
       <DatePicker
@@ -123,7 +134,7 @@ const Filters = ({
       ))}
       <IconWithMenu
         icon={AddIcon}
-        iconClass={addClass}
+        iconClass={classes.addBtn}
         onItemClick={onItemClick}
         list={categories}
       />
@@ -140,26 +151,13 @@ const Filters = ({
   );
 };
 
-const mapStateToProps = (state, props) => {
-  const global = selectAppState(state);
-  const reportPage = state.reportPage || initialState;
-  const { filters } = reportPage;
-  const allCategories = Object.keys(global.categoryUrls);
-  const filterKeys = Object.keys(filters);
-  const unselectedCategories = allCategories.filter(
-    c => !filterKeys.includes(c),
-  );
-
-  return {
-    ...props,
-    filters,
-    selectedCategory: global.selectedCategory,
-    categories: unselectedCategories.map(c => ({ text: c })),
-    categoryData: global.categoryData,
-    startDate: reportPage.startDate,
-    endDate: reportPage.endDate,
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  filters: makeSelectFilters(),
+  categories: makeGetUnselectedCategories(),
+  selectedCategory: getSelectedCategory,
+  categoryData: getCategoryData,
+  reportPage: makeSelectReportPage()
+});
 
 export default connect(
   mapStateToProps,

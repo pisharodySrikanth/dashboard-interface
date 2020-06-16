@@ -4,7 +4,7 @@ import axios from 'axios';
 import config from '../../config';
 import { INITIALIZE_DASHBOARD, CHANGE_VALUE } from './constants';
 import { setCategoryUrls, setCategoryData } from '../App/actions';
-import { selectCategory, selectResource } from '../App/selectors';
+import { getSelectedCategory, getResource } from '../App/selectors';
 import { fetchCategories, fetchValues } from '../App/requests';
 
 function postImpression(categoryKey, resource) {
@@ -15,8 +15,8 @@ function postImpression(categoryKey, resource) {
 }
 
 function* setImpression(action) {
-    const category = yield select(selectCategory);
-    const resource = yield select(selectResource, action.value);
+    const category = yield select(getSelectedCategory);
+    const resource = yield select(getResource, action.value);
     try {
         yield call(postImpression, category, resource);
     } catch (e) {
@@ -51,8 +51,6 @@ function* initialize(action) {
 
 // Individual exports for testing
 export default function* homePageSaga() {
-    // yield takeEvery(INITIALIZE_DASHBOARD, initialize);
-    // yield takeLatest(CHANGE_CATEGORY, getValues);
     yield takeEvery(INITIALIZE_DASHBOARD, initialize);
     yield takeEvery(CHANGE_VALUE, setImpression);
 }

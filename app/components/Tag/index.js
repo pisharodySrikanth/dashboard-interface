@@ -9,8 +9,6 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-// import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 
 const useStyles = makeStyles((theme) => ({
 	tag: {
@@ -63,7 +61,5 @@ function Tag({
 		</Button>
 	);
 }
-
-Tag.propTypes = {};
 
 export default forwardRef(Tag);

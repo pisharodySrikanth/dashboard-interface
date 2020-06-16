@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Chart, Line } from 'react-chartjs-2';
+import { createStructuredSelector } from 'reselect';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import * as zoom from 'chartjs-plugin-zoom';
@@ -8,7 +9,7 @@ import 'chartjs-adapter-date-fns';
 import parse from 'date-fns/parse';
 import toDate from 'date-fns/toDate';
 import differenceInDays from 'date-fns/differenceInDays';
-import { initialState } from './reducer';
+import makeSelectVisualisationPage from './selectors';
 import { applyParams } from './actions';
 
 const getRandomColor = () => {
@@ -55,8 +56,13 @@ const getLineProps = () => {
   };
 };
 
-const ChartContainer = ({ resources, granularity, applyParams, category }) => {
+const ChartContainer = ({ visualisationPage, applyParams }) => {
   const classes = useStyles();
+  const {
+    resources,
+    granularity,
+    category
+  } = visualisationPage;
   const dateFormat =
     granularity === 'day' ? 'dd-MM-yyyy' : 'dd-MM-yyyy hh:mm:ss';
 
@@ -153,16 +159,9 @@ const ChartContainer = ({ resources, granularity, applyParams, category }) => {
   );
 };
 
-const mapStateToProps = (state, props) => {
-  const visualisationPage = state.visualisationPage || initialState;
-
-  return {
-    ...props,
-    resources: visualisationPage.resources,
-    granularity: visualisationPage.granularity,
-    category: visualisationPage.category,
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  visualisationPage: makeSelectVisualisationPage()
+});
 
 export default connect(
   mapStateToProps,

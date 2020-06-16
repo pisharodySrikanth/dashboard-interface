@@ -5,15 +5,12 @@
  */
 
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { initializeChart } from './actions';
-import makeSelectVisualisationPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import Attributes from './Attributes';
@@ -38,24 +35,11 @@ export function VisualisationPage({ initializeChart }) {
   );
 }
 
-VisualisationPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = createStructuredSelector({
-  visualisationPage: makeSelectVisualisationPage(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-    initializeChart: () => dispatch(initializeChart()),
-  };
-}
-
 const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
+  null,
+  {
+    initializeChart
+  },
 );
 
 export default compose(withConnect)(VisualisationPage);

@@ -7,25 +7,7 @@ export default [
         text: 'Dashboard',
         icon: DashboardIcon,
         page: 'dashboard',
-        to: '/',
-        subMenu1: [
-            {
-                text: 'Dashboard 1',
-                icon: DashboardIcon,
-                page: 'dashboard',
-                to: '/',
-            }, {
-                text: 'Dashboard 2',
-                icon: DashboardIcon,
-                page: 'dashboard2',
-                to: '/',
-            }, {
-                text: 'Dashboard',
-                icon: DashboardIcon,
-                page: 'dashboard3',
-                to: '/',
-            }
-        ]
+        to: '/'
     },
     {
         text: 'Report',
