@@ -2,6 +2,7 @@ import React, { useMemo, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Chart, Line } from 'react-chartjs-2';
 import { createStructuredSelector } from 'reselect';
+import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import * as zoom from 'chartjs-plugin-zoom';
@@ -25,6 +26,9 @@ const useStyles = makeStyles(theme => ({
     margin: 'auto',
     padding: theme.spacing(3),
     marginTop: theme.spacing(3),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 }));
 
@@ -148,13 +152,15 @@ const ChartContainer = ({ visualisationPage, applyParams }) => {
     [granularity, dateFormat, category],
   );
 
-  if (resources.length === 0) {
-    return null;
-  }
-
   return (
     <Paper elevation={8} className={classes.container}>
-      <Line data={data} redraw options={options} />
+      {resources.length === 0 ? (
+        <Typography variant='h3'>
+          No data found
+        </Typography>
+      ) : (
+        <Line data={data} redraw options={options} />
+      )}
     </Paper>
   );
 };

@@ -11,7 +11,7 @@ export const initialState = {
 	endDate: new Date(),
 	filters: {},
 	dateDimension: 'day',
-	dimensions: ['date'],
+	dimensions: [],
 	reportData: null
 };
 
