@@ -65,7 +65,9 @@ const userOptions = [{
     id: 'logout'
 }]
 
-export default function Header() {
+export default function Header({
+    title
+}) {
     const classes = useStyles();
 
     const onNotificationClick = (item) => {
@@ -79,7 +81,7 @@ export default function Header() {
     return (
         <nav className={classes.nav}>
             <div className={classes.pageTitle}>
-                Dashboard
+                {title}
             </div>
             <div>
                 <span>

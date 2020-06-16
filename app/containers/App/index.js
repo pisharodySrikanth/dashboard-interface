@@ -45,7 +45,9 @@ function App(props) {
 				selected={matchedRoute ? matchedRoute.page : null}
 			/>
 			<div className={classes.leftSection}>
-				<Header />
+				<Header 
+					title={matchedRoute ? matchedRoute.title : ''}
+				/>
 				<Switch>
 					{routes.map(route => (
 						<Route 
